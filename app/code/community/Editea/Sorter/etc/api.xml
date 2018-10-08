@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+        <config>
+        <api>
+            <resources>
+                <sorter_api translate="title" module="sorter">
+                    <title>Myapi</title>
+                    <acl>sorter/api</acl>
+                    <model>sorter/api</model>
+                    <methods>
+    						<setproductsposition translate="title" module="sorter">
+    							<title>Editea products positions</title>
+    							<acl>sorter/setproductsposition</acl>
+    						</setproductsposition>
+                        <getcategoriestree translate="title" module="sorter">
+                            <title>Editea categories tree</title>
+                            <acl>sorter/getcategoriestree</acl>
+                        </getcategoriestree>
+                        <getbrandstree translate="title" module="sorter">
+                            <title>Editea brands tree</title>
+                            <acl>sorter/getbrandstree</acl>
+                        </getbrandstree>
+                        <getproductsdetails translate="title" module="sorter">
+                            <title>Editea products details</title>
+                            <acl>sorter/getproductsdetails</acl>
+                        </getproductsdetails>
+                    </methods>
+                </sorter_api>
+            </resources>
+            <acl>
+                <resources>
+                    <sorter translate="title" module="sorter">
+                        <title>Sorter</title>
+                        <sort_order>2000</sort_order>
+    					<setproductsposition translate="title" module="sorter">
+                            <title>Editea products positions</title>
+                        </setproductsposition>
+                        <getcategoriestree translate="title" module="sorter">
+                            <title>Editea categories tree</title>
+                        </getcategoriestree>
+                        <getbrandstree translate="title" module="sorter">
+                            <title>Editea brands tree</title>
+                            <acl>sorter/getbrandstree</acl>
+                        </getbrandstree>
+                        <getproductsdetails translate="title" module="sorter">
+                            <title>Editea products details</title>
+                            <acl>sorter/getproductsdetails</acl>
+                        </getproductsdetails>
+                    </sorter>
+                </resources>
+            </acl>
+        </api>
+    </config>

@@ -1,0 +1,3 @@
+app/code/community/Editea/Sorter		app/code/community/Editea/Sorter
+app/etc/modules/Editea_Sorter.xml	app/etc/modules/Editea_Sorter.xml
+app/design/adminhtml/default/default/layout/sorter.xml app/design/adminhtml/default/default/layout/sorter.xml

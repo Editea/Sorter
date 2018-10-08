@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<config>
+	  <tabs>
+		<editea_sorter translate="label" module="sorter">
+            <label>Editea Sorter</label>
+            <sort_order>0</sort_order>
+        </editea_sorter>
+	  </tabs>
+	  <sections>
+		<sorter_api  translate="label" module="sorter">                    
+		<label>API</label>
+		<tab>editea_sorter</tab>
+		<frontend_type>text</frontend_type>
+		<sort_order>0</sort_order>
+		<show_in_default>1</show_in_default>
+		<show_in_website>1</show_in_website>
+		<show_in_store>1</show_in_store>            
+					<groups>
+				      <sorter_api_group translate="label"> 
+					  <label>API Details</label>
+					  <frontend_type>text</frontend_type>
+					  <sort_order>0</sort_order>
+					  <show_in_default>1</show_in_default>
+					  <show_in_website>1</show_in_website>
+					  <show_in_store>1</show_in_store>
+				       <fields>
+						<active translate="label">
+						   <label>Enabled</label>
+						   <frontend_type>select</frontend_type>
+						   <source_model>adminhtml/system_config_source_yesno</source_model>
+						   <sort_order>0</sort_order>
+						   <show_in_default>1</show_in_default>
+						   <show_in_website>1</show_in_website>
+						   <show_in_store>1</show_in_store>
+						</active>
+                          <api_key translate="label">
+                            <label>API key</label>
+							<frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+							<comment>Set in this field your Editea API key for integration</comment>
+                          </api_key>
+						   <store_id translate="label">
+							   <label>Store Id</label>
+							   <frontend_type>select</frontend_type>
+							   <source_model>sorter/system_config_source_dropdown_stores</source_model>
+							   <sort_order>2</sort_order>
+							   <show_in_default>1</show_in_default>
+							   <show_in_website>1</show_in_website>
+							   <show_in_store>1</show_in_store>
+							   <comment>Set in this field your active store id</comment>
+						   </store_id>
+   						   <min_in_stock translate="label">
+							   <label>Min Item To Be In Stock</label>
+							   <frontend_type>text</frontend_type>
+							   <sort_order>5</sort_order>
+							   <show_in_default>1</show_in_default>
+							   <show_in_website>1</show_in_website>
+							   <show_in_store>1</show_in_store>
+							   <comment>Set in this field your min qty to decide if item is in stock, if qty is bigger or equal then this field the item will show as in stock else if the qty will be below, it will show as out of stock, leave empty for defualt 0</comment>
+						   </min_in_stock>
+						   <clear_cache_after_sort translate="label">
+							   <label>Clear Cache After Sort</label>
+							   <frontend_type>select</frontend_type>
+							   <source_model>adminhtml/system_config_source_yesno</source_model>
+							   <sort_order>10</sort_order>
+							   <show_in_default>1</show_in_default>
+							   <show_in_website>1</show_in_website>
+							   <show_in_store>1</show_in_store>
+							   <comment>Set true or false for clearing the cache automatically after your sort</comment>
+						   </clear_cache_after_sort>
+						   <reindex_category_products_after_sort translate="label">
+							   <label>Reindex Category Products After Sort</label>
+							   <frontend_type>select</frontend_type>
+							   <source_model>adminhtml/system_config_source_yesno</source_model>
+							   <sort_order>11</sort_order>
+							   <show_in_default>1</show_in_default>
+							   <show_in_website>1</show_in_website>
+							   <show_in_store>1</show_in_store>
+							   <comment>Set true or false for reindex the category products automatically after your sort</comment>
+						   </reindex_category_products_after_sort>
+						   <additional_attributes translate="label">
+							   <label>Additional Attributes</label>
+							   <frontend_type>multiselect</frontend_type>
+							   <source_model>sorter/system_config_source_multiselect_attributes</source_model>
+							   <sort_order>12</sort_order>
+							   <show_in_default>1</show_in_default>
+							   <show_in_website>1</show_in_website>
+							   <show_in_store>1</show_in_store>
+							   <comment>Select your additional attributes for view on product list (we allow only attributes that used in product listing)</comment>
+						   </additional_attributes>
+						   <debug_mode translate="label">
+							   <label>Debug Mode</label>
+							   <frontend_type>select</frontend_type>
+							   <source_model>sorter/system_config_source_dropdown_values</source_model>
+							   <sort_order>13</sort_order>
+							   <show_in_default>1</show_in_default>
+							   <show_in_website>1</show_in_website>
+							   <show_in_store>1</show_in_store>
+							   <comment>Enable or disable debug mode for support and developers (write logs to editea_report table)</comment>
+						   </debug_mode>
+					   </fields>
+					   </sorter_api_group>
+						<sorter_api_group_brand_support translate="label">
+							<label>Brand support</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<fields>
+								<brand_attribute_code translate="label">
+									<label>Brand Attribute Code</label>
+									<frontend_type>text</frontend_type>
+									<sort_order>0</sort_order>
+									<show_in_default>1</show_in_default>
+									<show_in_website>1</show_in_website>
+									<show_in_store>1</show_in_store>
+									<comment>Set in this field your attribute code for brand (used to generate brand pages)</comment>
+								</brand_attribute_code>
+								<brand_position_id translate="label">
+									<label>Brand Position Id</label>
+									<frontend_type>text</frontend_type>
+									<sort_order>1</sort_order>
+									<show_in_default>1</show_in_default>
+									<show_in_website>1</show_in_website>
+									<show_in_store>1</show_in_store>
+									<comment>Set in this field your attribute id for Brand position</comment>
+								</brand_position_id>
+								<brand_position_category_id translate="label">
+									<label>Brand Position Category Id</label>
+									<frontend_type>text</frontend_type>
+									<sort_order>2</sort_order>
+									<show_in_default>1</show_in_default>
+									<show_in_website>1</show_in_website>
+									<show_in_store>1</show_in_store>
+									<comment>Set in this field your category id that used for brand position</comment>
+								</brand_position_category_id>
+							</fields>
+						</sorter_api_group_brand_support>
+					</groups>
+		</sorter_api>
+	  </sections>
+</config>
