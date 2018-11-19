@@ -3,6 +3,10 @@ class Editea_Sorter_Helper_Data extends Mage_Core_Helper_Abstract
 {
     private $active = false;
 
+    private $userApi = '';
+
+    private $tokenApi = '';
+
     private $homeUrl = '';
 
     private $storeId = '';
@@ -33,6 +37,8 @@ class Editea_Sorter_Helper_Data extends Mage_Core_Helper_Abstract
     public function __construct()
     {
         $this->active = $this->getStoreConfigByFiled('active');
+        $this->userApi = $this->getStoreConfigByFiled('user_api');
+        $this->tokenApi = $this->getStoreConfigByFiled('token_api');
         $this->storeId = $this->getStoreConfigByFiled('store_id'); //the store is needed for base url:
         $this->rootCategoryId = Mage::app()->getStore($this->storeId)->getRootCategoryId();
 
@@ -87,6 +93,16 @@ class Editea_Sorter_Helper_Data extends Mage_Core_Helper_Abstract
     public function getIsActive()
     {
         return $this->active;
+    }
+
+    public function getUserApi()
+    {
+        return $this->userApi;
+    }
+
+    public function getTokenApi()
+    {
+        return $this->tokenApi;
     }
 
     public function getHomeUrl()

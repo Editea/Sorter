@@ -2,6 +2,9 @@
 class Editea_Sorter_IndexController extends Mage_Core_Controller_Front_Action{
 
     private $sorterModel = '';
+
+    private $validetorModel = '';
+
     private $jsonRequest = '';
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
@@ -9,6 +12,8 @@ class Editea_Sorter_IndexController extends Mage_Core_Controller_Front_Action{
         parent::__construct($request,  $response, $invokeArgs);
 
         $this->sorterModel = Mage::getModel("sorter/sorter");
+
+        $this->validetorModel = Mage::getModel("sorter/validetor");
 
         $jsonRequest = $this->getRequest()->getPost('data');
 
@@ -30,6 +35,24 @@ class Editea_Sorter_IndexController extends Mage_Core_Controller_Front_Action{
         return false;
     }
 
+    private function returnBadAuthResponse()
+    {
+        $message = 'Post request is not authorize';
+        $this->getResponse()->setHeader('HTTP/1.0','400',true);
+        $this->getResponse()->setBody($message);
+
+        return false;
+    }
+
+    private function returnUnactiveResponse()
+    {
+        $message = 'API is not active';
+        $this->getResponse()->setHeader('HTTP/1.0','400',true);
+        $this->getResponse()->setBody($message);
+
+        return false;
+    }
+
     public function IndexAction() {
         $version = Mage::helper('sorter')->getExtensionVersion();
 
@@ -38,10 +61,29 @@ class Editea_Sorter_IndexController extends Mage_Core_Controller_Front_Action{
 
     private function validateRequest()
     {
+        if (!$this->helper->getIsActive())
+            return $this->returnUnactiveResponse();
+
         if (empty($this->jsonRequest))
             return $this->returnErrorResponse();
 
+        $sorterParams = json_decode($this->jsonRequest);
+
+        if (empty($sorterParams->auth) || empty($sorterParams->ts))
+            return $this->returnErrorResponse();
+
+        if (!$this->validetorModel->validate($sorterParams->auth, $sorterParams->ts))
+            return $this->returnBadAuthResponse();
+
         return true;
+    }
+
+    public function checkAuthAction()
+    {
+        if (!$this->validateRequest())
+            return $this;
+
+        $this->returnResponse(true);
     }
 
     public function setProductsPositionAction()

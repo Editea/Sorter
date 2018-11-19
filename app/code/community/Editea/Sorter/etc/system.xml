@@ -33,20 +33,39 @@
 						   <show_in_website>1</show_in_website>
 						   <show_in_store>1</show_in_store>
 						</active>
-                          <api_key translate="label">
-                            <label>API key</label>
+					    <request_url translate="label">
+						   <label>Web App Request URL</label>
+						   <frontend_type>text</frontend_type>
+							<frontend_model>sorter/adminhtml_system_config_source_text_url</frontend_model>
+						   <sort_order>1</sort_order>
+						   <show_in_default>1</show_in_default>
+						   <show_in_website>1</show_in_website>
+						   <show_in_store>1</show_in_store>
+						   <comment>Copy this field to your Editea web app for integration</comment>
+					    </request_url>
+						<user_api translate="label">
+						   <label>User API</label>
+						   <frontend_type>text</frontend_type>
+						   <sort_order>2</sort_order>
+						   <show_in_default>1</show_in_default>
+						   <show_in_website>1</show_in_website>
+						   <show_in_store>1</show_in_store>
+						   <comment>Set in this field your Editea User API for integration</comment>
+						</user_api>
+                          <token_api translate="label">
+                            <label>Token API</label>
 							<frontend_type>text</frontend_type>
-                            <sort_order>1</sort_order>
+                            <sort_order>3</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-							<comment>Set in this field your Editea API key for integration</comment>
-                          </api_key>
+							<comment>Set in this field your Editea Token API key for integration</comment>
+                          </token_api>
 						   <store_id translate="label">
 							   <label>Store Id</label>
 							   <frontend_type>select</frontend_type>
 							   <source_model>sorter/system_config_source_dropdown_stores</source_model>
-							   <sort_order>2</sort_order>
+							   <sort_order>4</sort_order>
 							   <show_in_default>1</show_in_default>
 							   <show_in_website>1</show_in_website>
 							   <show_in_store>1</show_in_store>
@@ -65,7 +84,7 @@
 							   <label>Clear Cache After Sort</label>
 							   <frontend_type>select</frontend_type>
 							   <source_model>adminhtml/system_config_source_yesno</source_model>
-							   <sort_order>10</sort_order>
+							   <sort_order>6</sort_order>
 							   <show_in_default>1</show_in_default>
 							   <show_in_website>1</show_in_website>
 							   <show_in_store>1</show_in_store>
@@ -75,7 +94,7 @@
 							   <label>Reindex Category Products After Sort</label>
 							   <frontend_type>select</frontend_type>
 							   <source_model>adminhtml/system_config_source_yesno</source_model>
-							   <sort_order>11</sort_order>
+							   <sort_order>7</sort_order>
 							   <show_in_default>1</show_in_default>
 							   <show_in_website>1</show_in_website>
 							   <show_in_store>1</show_in_store>
@@ -85,7 +104,7 @@
 							   <label>Additional Attributes</label>
 							   <frontend_type>multiselect</frontend_type>
 							   <source_model>sorter/system_config_source_multiselect_attributes</source_model>
-							   <sort_order>12</sort_order>
+							   <sort_order>8</sort_order>
 							   <show_in_default>1</show_in_default>
 							   <show_in_website>1</show_in_website>
 							   <show_in_store>1</show_in_store>
@@ -95,7 +114,7 @@
 							   <label>Debug Mode</label>
 							   <frontend_type>select</frontend_type>
 							   <source_model>sorter/system_config_source_dropdown_values</source_model>
-							   <sort_order>13</sort_order>
+							   <sort_order>9</sort_order>
 							   <show_in_default>1</show_in_default>
 							   <show_in_website>1</show_in_website>
 							   <show_in_store>1</show_in_store>

@@ -4,6 +4,8 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
 {
     protected $helper = '';
     protected $conn = '';
+    protected $totalPages = 1;
+
 
     protected function _construct(){
 
@@ -18,9 +20,6 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
 
     public function setProductsPosition($jsonRequest)
     {
-        if (!$this->helper->getIsActive())
-            return 'API is not active';
-
         $this->helper->reportLog($jsonRequest, 'setProductsPosition');
 
         $sorterParams = json_decode($jsonRequest);
@@ -94,9 +93,6 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
 
     public function getProductsDetails($jsonRequest)
     {
-        if (!$this->helper->getIsActive())
-            return 'API is not active';
-
         $this->helper->reportLog($jsonRequest, 'getProductsDetails');
 
         $sorterParams = json_decode($jsonRequest);
@@ -122,7 +118,8 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
                 $productsDetails = $this->getProductsDetailsArray($categoryId, $i, $sorterType);
 
                 $response[] = array(
-                    'page' => $i,
+                    'page' => (int)$i,
+                    'total_pages' => (int)$this->totalPages,
                     'products' => $productsDetails
                 );
             }
@@ -142,9 +139,6 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
 
     private function categoriesTree($id)
     {
-        if (!$this->helper->getIsActive())
-            return 'API is not active';
-
         $category = Mage::getModel('catalog/category');
 
         $_category = $category->setStoreId($this->helper->getStoreId())->load($id);
@@ -174,9 +168,6 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
 
     public function getBrands($level)
     {
-        if (!$this->helper->getIsActive())
-            return 'API is not active';
-
         $details = array();
 
         $attribute = Mage::getSingleton('eav/config')
@@ -249,7 +240,6 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
         }
 
         $productsCollection = $this->getCategoryProductsCollection($categoryId, $page, $this->helper->getStoreId(), $brandId);
-
 
         $symbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
 
@@ -375,6 +365,14 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
 
     private function getCategoryProductsCollection($categoryId, $page, $storeId, $brandId)
     {
+        $category = Mage::getModel('catalog/category')
+            ->setStoreId($storeId)
+            ->load($categoryId);
+
+        Mage::unregister('current_category');
+
+        Mage::register('current_category', $category);
+
         $block = Mage::app()
             ->setCurrentStore($storeId)
             ->getLayout()->createBlock('catalog/product_list')
@@ -414,6 +412,8 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
         ));
 
         $lastPageNum = $collection->getLastPageNumber();
+
+        $this->totalPages = $lastPageNum;
 
         if ($page > $lastPageNum)
             return array();

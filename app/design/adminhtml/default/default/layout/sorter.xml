@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<layout version="0.1.0">
-  <sorter_adminhtml_sorter_index>
-	<reference name="content">
-	  <block type="sorter/adminhtml_sorter" name="sorter" />
-	</reference>
-  </sorter_adminhtml_sorter_index>
-</layout>
