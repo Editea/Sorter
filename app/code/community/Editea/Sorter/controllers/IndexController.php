@@ -61,7 +61,7 @@ class Editea_Sorter_IndexController extends Mage_Core_Controller_Front_Action{
 
     private function validateRequest()
     {
-        if (!$this->helper->getIsActive())
+        if (!Mage::helper('sorter')->getIsActive())
             return $this->returnUnactiveResponse();
 
         if (empty($this->jsonRequest))

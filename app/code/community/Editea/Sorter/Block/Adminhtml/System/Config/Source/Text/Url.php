@@ -34,7 +34,7 @@ class Editea_Sorter_Block_Adminhtml_System_Config_Source_Text_Url extends Mage_A
     {
         $storeCode= '';
 
-        $controllerFrontName = 'editea_sorter';
+        $controllerFrontName = 'editea_sorter/index/';
 
         $flag = Mage::getStoreConfigFlag('web/url/use_store');
 
