@@ -1,49 +1,60 @@
 <?php
+
 class Editea_Sorter_Helper_Data extends Mage_Core_Helper_Abstract
 {
-    private $active = false;
+    private $active;
 
-    private $userApi = '';
+    private $userApi;
 
-    private $tokenApi = '';
+    private $tokenApi;
 
-    private $homeUrl = '';
+    private $homeUrl;
 
-    private $storeId = '';
+    private $storeId;
 
-    private $rootCategoryId = '';
+    private $rootCategoryId;
 
-    private $brandAttributeCode = '';
+    private $brandAttributeCode;
 
-    private $brandPositionId = '';
+    private $brandPositionId;
 
-    private $brandPositionCategoryId ='';
+    private $brandPositionCategoryId;
 
-    private $cleanCategoryCache = '';
+    private $cleanCategoryCache;
 
-    private $reindexCategoryProducts = '';
+    private $cleanOnlyVarnishCategoryCache;
 
-    private $minInStock = 0;
+    private $reindexCategoryProducts;
 
-    private $additionalAttributes = array();
+    private $minInStock;
 
-    private $debugMode = false;
+    private $additionalAttributes;
 
-    private $sessionId = '';
+    private $debugMode;
+
+    private $saveLogsMonths;
+
+    private $sessionId;
 
     const SORTER_API_STORE_CONFIG_PATH = 'sorter_api/sorter_api_group/';
     const SORTER_API_STORE_CONFIG_BRAND_SUPPORT_PATH = 'sorter_api/sorter_api_group_brand_support/';
+    const SORTER_API_STORE_CONFIG_LOGS_SETTINGS_PATH = 'sorter_api/sorter_logs_settings/';
 
+    /**
+     * Editea_Sorter_Helper_Data constructor.
+     * @throws Mage_Core_Model_Store_Exception
+     */
     public function __construct()
     {
-        $this->active = $this->getStoreConfigByFiled('active');
+        $this->active = $this->getStoreConfigByFiled('active', true);
         $this->userApi = $this->getStoreConfigByFiled('user_api');
         $this->tokenApi = $this->getStoreConfigByFiled('token_api');
         $this->storeId = $this->getStoreConfigByFiled('store_id'); //the store is needed for base url:
         $this->rootCategoryId = Mage::app()->getStore($this->storeId)->getRootCategoryId();
 
-        if (empty($this->storeId))
+        if (empty($this->storeId)) {
             $this->storeId = 0;
+        }
 
         // Brand support settings
         $this->brandAttributeCode = $this->getStoreConfigBrandSupportByFiled('brand_attribute_code');
@@ -51,13 +62,17 @@ class Editea_Sorter_Helper_Data extends Mage_Core_Helper_Abstract
         $this->brandPositionCategoryId = $this->getStoreConfigBrandSupportByFiled('brand_position_category_id');
 
         // Main settings
-        $this->cleanCategoryCache = $this->getStoreConfigByFiled('clear_cache_after_sort');
-        $this->reindexCategoryProducts = $this->getStoreConfigByFiled('reindex_category_products_after_sort');
+        $this->cleanCategoryCache = $this->getStoreConfigByFiled('clear_cache_after_sort', true);
+        $this->cleanOnlyVarnishCategoryCache = $this->getStoreConfigByFiled('clear_varnish_cache__only', true);
+        $this->reindexCategoryProducts = $this->getStoreConfigByFiled('reindex_category_products_after_sort', true);
         $this->minInStock = $this->getStoreConfigByFiled('min_in_stock');
         $this->additionalAttributes = $this->renderAdditionalAttributes();
-        $this->debugMode = $this->getStoreConfigByFiled('debug_mode');
 
-        $homeUrl = Mage::getUrl('', array('_store' => $this->storeId));
+        // Logs Settings
+        $this->debugMode = $this->getStoreConfigLogsSettingsByFiled('debug_mode');
+        $this->saveLogsMonths = $this->getStoreConfigLogsSettingsByFiled('save_logs_months');
+
+        $homeUrl = Mage::getUrl('', ['_store' => $this->storeId]);
         $this->homeUrl = strtok($homeUrl, '?');
 
         $session = Mage::getSingleton('core/session');
@@ -66,28 +81,45 @@ class Editea_Sorter_Helper_Data extends Mage_Core_Helper_Abstract
 
     private function renderAdditionalAttributes()
     {
-        $attributesResponse = array();
+        $attributesResponse = [];
 
         $attributeIds = explode(',', $this->getStoreConfigByFiled('additional_attributes'));
 
         $productAttributes = Mage::getResourceModel('catalog/product_attribute_collection')
-            ->addFieldToFilter('main_table.attribute_id', array('in' => $attributeIds));
+            ->addFieldToFilter('main_table.attribute_id', ['in' => $attributeIds]);
 
-        foreach($productAttributes as $attribute) {
+        foreach ($productAttributes as $attribute) {
             $attributesResponse[$attribute->getAttributeId()] = $attribute->getAttributeCode();
         }
 
         return $attributesResponse;
     }
 
-    private function getStoreConfigByFiled($field)
+    private function getStoreConfigByFiled($field, $isFlag = false)
     {
+        if ($isFlag) {
+            return Mage::getStoreConfigFlag(self::SORTER_API_STORE_CONFIG_PATH . $field);
+        }
+
         return Mage::getStoreConfig(self::SORTER_API_STORE_CONFIG_PATH . $field);
     }
 
-    private function getStoreConfigBrandSupportByFiled($field)
+    private function getStoreConfigBrandSupportByFiled($field, $isFlag = false)
     {
+        if ($isFlag) {
+            return Mage::getStoreConfigFlag(self::SORTER_API_STORE_CONFIG_BRAND_SUPPORT_PATH . $field);
+        }
+
         return Mage::getStoreConfig(self::SORTER_API_STORE_CONFIG_BRAND_SUPPORT_PATH . $field);
+    }
+
+    private function getStoreConfigLogsSettingsByFiled($field, $isFlag = false)
+    {
+        if ($isFlag) {
+            return Mage::getStoreConfigFlag(self::SORTER_API_STORE_CONFIG_LOGS_SETTINGS_PATH . $field);
+        }
+
+        return Mage::getStoreConfig(self::SORTER_API_STORE_CONFIG_LOGS_SETTINGS_PATH . $field);
     }
 
     public function getIsActive()
@@ -157,13 +189,24 @@ class Editea_Sorter_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getDebugMode($level)
     {
-        if ($this->debugMode == 1 && ($level == 'low'))
+        if ($this->debugMode === 1 && ($level === 'low')) {
             return true;
+        }
 
-        if ($this->debugMode == 2)
+        if ($this->debugMode === 2) {
             return true;
+        }
 
         return false;
+    }
+
+    public function getSaveLogsMonths()
+    {
+        if ($this->saveLogsMonths === '') {
+            return 1;
+        }
+
+        return $this->saveLogsMonths;
     }
 
     public function getSessionId()
@@ -173,8 +216,7 @@ class Editea_Sorter_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function reportLog($message = '', $type = 'general', $level = 'low', $itemId = '')
     {
-        if ($this->getDebugMode($level) && !empty($message))
-        {
+        if (!empty($message) && $this->getDebugMode($level)) {
             Mage::getModel('sorter/sorter')
                 ->setReportType($type)
                 ->setReportLevel($level)
@@ -187,7 +229,7 @@ class Editea_Sorter_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getExtensionVersion()
     {
-        return (string) Mage::getConfig()->getNode()->modules->Editea_Sorter->version;
+        return (string)Mage::getConfig()->getNode()->modules->Editea_Sorter->version;
     }
 }
 	 

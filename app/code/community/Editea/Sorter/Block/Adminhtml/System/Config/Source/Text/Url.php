@@ -30,27 +30,31 @@
  */
 class Editea_Sorter_Block_Adminhtml_System_Config_Source_Text_Url extends Mage_Adminhtml_Block_System_Config_Form_Fieldset
 {
+    /**
+     * @param Varien_Data_Form_Element_Abstract $element
+     * @return string
+     * @throws Mage_Core_Exception
+     * @throws Mage_Core_Model_Store_Exception
+     */
     public function render(Varien_Data_Form_Element_Abstract $element)
     {
-        $storeCode= '';
-
         $controllerFrontName = 'editea_sorter/index/';
 
         $flag = Mage::getStoreConfigFlag('web/url/use_store');
 
-        $storeId = $iDefaultStoreId = Mage::app()
+        $storeId = Mage::app()
             ->getWebsite(true)
             ->getDefaultGroup()
             ->getDefaultStoreId();
 
         $frontendUrl = Mage::app()->getStore($storeId)->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK);
 
-        if ($flag)
-        {
+        if ($flag) {
             $configStoreId = Mage::helper('sorter')->getStoreId();
 
-            if ($configStoreId !== $storeId)
+            if ($configStoreId !== $storeId) {
                 $frontendUrl = Mage::app()->getStore($configStoreId)->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK);
+            }
         }
 
         $url = $frontendUrl . $controllerFrontName;
@@ -61,12 +65,12 @@ class Editea_Sorter_Block_Adminhtml_System_Config_Source_Text_Url extends Mage_A
 
         $html .= '<input type="text" class=" input-text" value="' . $url . '" id="requestUrl" readonly="true">';
 
-        $html .= '<button onclick="copyToCliboardRequestUrl(); return false;">Copy to clipboard</button>';
+        $html .= '<button onclick="copyToClipboardRequestUrl(); return false;">Copy to clipboard</button>';
 
         $html .= '<p class="note"><span>Copy this field to your Editea web app for integration</span></p></td>';
 
         $html .= '<script>
-            function copyToCliboardRequestUrl() {
+            function copyToClipboardRequestUrl() {
                       var copyText = document.getElementById("requestUrl");
                     
                       /* Select the text field */

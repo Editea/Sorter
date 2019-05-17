@@ -38,12 +38,12 @@ class Editea_Sorter_Model_System_Config_Source_Multiselect_Attributes
      */
     public function toOptionArray()
     {
-        $attributesResponse = array();
+        $attributesResponse = [];
         $productAttributes = Mage::getResourceModel('catalog/product_attribute_collection');
-        $productAttributes->addFieldToFilter('used_in_product_listing',1);
+        $productAttributes->addFieldToFilter('used_in_product_listing', 1);
 
-        foreach($productAttributes as $attribute) {
-            $temp = array();
+        foreach ($productAttributes as $attribute) {
+            $temp = [];
             $temp['value'] = $attribute->getAttributeId();
             $temp['label'] = $attribute->getAttributeCode();
             $attributesResponse[] = $temp;
@@ -59,11 +59,11 @@ class Editea_Sorter_Model_System_Config_Source_Multiselect_Attributes
      */
     public function toArray()
     {
-        $attributesResponse = array();
+        $attributesResponse = [];
         $productAttributes = Mage::getResourceModel('catalog/product_attribute_collection');
-        $productAttributes->addFieldToFilter('used_in_product_listing',1);
+        $productAttributes->addFieldToFilter('used_in_product_listing', 1);
 
-        foreach($productAttributes as $attribute) {
+        foreach ($productAttributes as $attribute) {
             $attributesResponse[$attribute->getAttributeId()] = $attribute->getAttributeCode();
         }
 

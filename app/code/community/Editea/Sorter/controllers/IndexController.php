@@ -1,118 +1,157 @@
 <?php
-class Editea_Sorter_IndexController extends Mage_Core_Controller_Front_Action{
 
-    private $sorterModel = '';
+class Editea_Sorter_IndexController extends Mage_Core_Controller_Front_Action
+{
+    /** @var Editea_Sorter_Model_Sorter $sorterModel */
+    private $sorterModel;
 
-    private $validetorModel = '';
+    /** @var Editea_Sorter_Model_Validator $validatorModel */
+    private $validatorModel;
 
-    private $jsonRequest = '';
+    private $jsonRequest;
 
-    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
-    {
-        parent::__construct($request,  $response, $invokeArgs);
+    private $helper;
 
-        $this->sorterModel = Mage::getModel("sorter/sorter");
+    /**
+     * Editea_Sorter_IndexController constructor.
+     * @param Zend_Controller_Request_Abstract $request
+     * @param Zend_Controller_Response_Abstract $response
+     * @param array $invokeArgs
+     */
+    public function __construct(
+        Zend_Controller_Request_Abstract $request,
+        Zend_Controller_Response_Abstract $response,
+        array $invokeArgs = []
+    ) {
+        parent::__construct($request, $response, $invokeArgs);
 
-        $this->validetorModel = Mage::getModel("sorter/validetor");
+        $this->sorterModel = Mage::getModel('sorter/sorter');
+
+        $this->validatorModel = Mage::getModel('sorter/validator');
 
         $jsonRequest = $this->getRequest()->getPost('data');
 
         $this->jsonRequest = $jsonRequest;
     }
 
-    private function returnResponse($response)
+    public function IndexAction()
+    {
+        $version = $this->getHelper()->getExtensionVersion();
+        $this->prepareResponse($version);
+    }
+
+    /**
+     * Test Auth
+     */
+    public function checkAuthAction()
+    {
+        $this->handleRequest(true);
+    }
+
+    /**
+     * Update Product Positions
+     */
+    public function setProductPositionAction()
+    {
+        $this->handleRequest(
+            $this->sorterModel->setProductPosition($this->jsonRequest)
+        );
+    }
+
+    /**
+     * Retrieve Category Tree
+     */
+    public function getCategoryTreeAction()
+    {
+        $this->handleRequest(
+            $this->sorterModel->getCategoryTree()
+        );
+    }
+
+    /**
+     * Retrieve product details
+     */
+    public function getProductDetailAction()
+    {
+        $this->handleRequest(
+            $this->sorterModel->getProductsDetails($this->jsonRequest)
+        );
+    }
+
+    /**
+     * Validate & Respond
+     * @param $response
+     */
+    protected function handleRequest($response)
+    {
+        if ($this->validateRequest()) {
+            $this->prepareResponse($response);
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    private function validateRequest()
+    {
+        $isValid = false;
+        if (!$this->getHelper()->getIsActive()) {
+            $this->prepareInactiveResponse();
+        } elseif (!$this->jsonRequest) {
+            $this->prepareInvalidResponse();
+        } elseif (!$this->validateAuth()) {
+            $this->prepareBadAuthResponse();
+        } else {
+            $isValid = true;
+        }
+        return $isValid;
+    }
+
+    /**
+     * @return bool
+     */
+    private function validateAuth()
+    {
+        $sorterParams = json_decode($this->jsonRequest);
+        return ($sorterParams->user && $sorterParams->token) &&
+            $this->validatorModel->validate($sorterParams->user, $sorterParams->token);
+    }
+
+    private function prepareResponse($response)
     {
         $this->getResponse()->setHeader('Content-type', 'application/json');
         $this->getResponse()->setBody($response);
     }
 
-    private function returnErrorResponse()
+    private function prepareInvalidResponse()
     {
-        $message = 'Post request is not valid (data param is not set)';
-        $this->getResponse()->setHeader('HTTP/1.0','400',true);
+        $this->prepareErrorResponse('Invalid Request');
+    }
+
+    private function prepareBadAuthResponse()
+    {
+        $this->prepareErrorResponse('Unauthorized Request');
+    }
+
+    private function prepareInactiveResponse()
+    {
+        $this->prepareErrorResponse('API Inactive');
+    }
+
+    private function prepareErrorResponse($message)
+    {
+        $this->getResponse()->setHeader('HTTP/1.0', '400', true);
         $this->getResponse()->setBody($message);
-
-        return false;
     }
 
-    private function returnBadAuthResponse()
+    /**
+     * @return Editea_Sorter_Helper_Data
+     */
+    private function getHelper()
     {
-        $message = 'Post request is not authorize';
-        $this->getResponse()->setHeader('HTTP/1.0','400',true);
-        $this->getResponse()->setBody($message);
-
-        return false;
-    }
-
-    private function returnUnactiveResponse()
-    {
-        $message = 'API is not active';
-        $this->getResponse()->setHeader('HTTP/1.0','400',true);
-        $this->getResponse()->setBody($message);
-
-        return false;
-    }
-
-    public function IndexAction() {
-        $version = Mage::helper('sorter')->getExtensionVersion();
-
-        $this->returnResponse($version);
-    }
-
-    private function validateRequest()
-    {
-        if (!Mage::helper('sorter')->getIsActive())
-            return $this->returnUnactiveResponse();
-
-        if (empty($this->jsonRequest))
-            return $this->returnErrorResponse();
-
-        $sorterParams = json_decode($this->jsonRequest);
-
-        if (empty($sorterParams->auth) || empty($sorterParams->ts))
-            return $this->returnErrorResponse();
-
-        if (!$this->validetorModel->validate($sorterParams->auth, $sorterParams->ts))
-            return $this->returnBadAuthResponse();
-
-        return true;
-    }
-
-    public function checkAuthAction()
-    {
-        if (!$this->validateRequest())
-            return $this;
-
-        $this->returnResponse(true);
-    }
-
-    public function setProductsPositionAction()
-    {
-        if (!$this->validateRequest())
-            return $this;
-
-        $response = $this->sorterModel->setProductsPosition($this->jsonRequest);
-
-        $this->returnResponse($response);
-    }
-
-    public function getCategoriesTreeAction()
-    {
-        if (!$this->validateRequest())
-            return $this;
-
-        $response = $this->sorterModel->getCategoriesTree($this->jsonRequest);
-
-        $this->returnResponse($response);
-    }
-
-    public function getProductsDetailsAction()
-    {
-        if (!$this->validateRequest())
-            return $this;
-
-        $response = $this->sorterModel->getProductsDetails($this->jsonRequest);
-
-        $this->returnResponse($response);
+        if (null === $this->helper) {
+            $this->helper = Mage::helper('sorter');
+        }
+        return $this->helper;
     }
 }
