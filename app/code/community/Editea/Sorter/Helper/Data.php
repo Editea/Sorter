@@ -189,11 +189,11 @@ class Editea_Sorter_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getDebugMode($level)
     {
-        if ($this->debugMode === 1 && ($level === 'low')) {
+        if ($this->debugMode == 1 && ($level === 'low')) {
             return true;
         }
 
-        if ($this->debugMode === 2) {
+        if ($this->debugMode == 2) {
             return true;
         }
 
