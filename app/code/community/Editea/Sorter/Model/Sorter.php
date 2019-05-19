@@ -134,17 +134,17 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
                 ];
             }
 
-            return json_encode($response);
+            return $response;
         }
 
         return 'No categoryId value';
     }
 
-    public function getCategoriesTree()
+    public function getCategoryTree()
     {
         $categoriesTree = $this->categoryTree($this->helper->getRootCategoryId());
 
-        return json_encode($categoriesTree);
+        return $categoriesTree;
     }
 
     private function categoryTree($id)

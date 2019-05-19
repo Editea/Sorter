@@ -130,7 +130,7 @@ class Editea_Sorter_IndexController extends Mage_Core_Controller_Front_Action
     private function prepareResponse($response)
     {
         $this->getResponse()->setHeader('Content-type', 'application/json');
-        $this->getResponse()->setBody($response);
+        $this->getResponse()->setBody(json_encode($response));
     }
 
     private function prepareInvalidResponse()

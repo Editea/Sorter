@@ -184,7 +184,7 @@ class Editea_Sorter_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getAdditionalAttributes()
     {
-        return $this->additionalAttributes;
+        return array_values($this->additionalAttributes);
     }
 
     public function getDebugMode($level)
