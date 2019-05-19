@@ -100,9 +100,9 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
         }
     }
 
-    public function getProductsDetails($jsonRequest)
+    public function getProductDetail($jsonRequest)
     {
-        $this->helper->reportLog($jsonRequest, 'getProductsDetails');
+        $this->helper->reportLog($jsonRequest, 'getProductDetail');
 
         $sorterParams = json_decode($jsonRequest);
         $categoryId = $sorterParams->category_id;
@@ -118,14 +118,14 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
             return 'No page value';
         }
 
-        $this->helper->reportLog('Sorter Type: ' . $sorterType, 'getProductsDetails');
+        $this->helper->reportLog('Sorter Type: ' . $sorterType, 'getProductDetail');
 
         if ($categoryId && $page) {
 
             $response = [];
 
             for ($i = $page; $i < ($totalPages + $page); $i++) {
-                $productsDetails = $this->getProductsDetailsArray($categoryId, $i, $sorterType);
+                $productsDetails = $this->getProductDetailArray($categoryId, $i, $sorterType);
 
                 $response[] = [
                     'page' => (int)$i,
@@ -262,7 +262,7 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
      * @throws Mage_Core_Exception
      * @throws Mage_Core_Model_Store_Exception
      */
-    private function getProductsDetailsArray($categoryId, $page, $sorterType)
+    private function getProductDetailArray($categoryId, $page, $sorterType)
     {
         $brandId = '';
 
@@ -271,7 +271,7 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
             $categoryId = $this->helper->getRootCategoryId();
         }
 
-        $productsCollection = $this->getCategoryProductsCollection($categoryId, $page, $this->helper->getStoreId(),
+        $productsCollection = $this->getCategoryProductCollection($categoryId, $page, $this->helper->getStoreId(),
             $brandId);
 
         $symbol = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
@@ -365,7 +365,7 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
                 $productSpecialPrice = $product->getFinalPrice() < $product->getPrice() ? round($product->getFinalPrice(),
                     2) : -1;
 
-                $additionalAttributes = $this->getAdditionalAttributes($product);
+                $additionalAttributes = $this->getProductAdditionalAttributes($product);
 
                 $tempDetails = [
                     'id' => $product->getEntityId(),
@@ -388,14 +388,14 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
 
                 $productsDetails[] = $productDetails->getData();
             } catch (Exception $e) {
-                $this->helper->reportLog($e->getMessage(), 'getProductsDetailsArray', 'high', $product->getEntityId());
+                $this->helper->reportLog($e->getMessage(), 'getProductDetailArray', 'high', $product->getEntityId());
             }
         }
 
         return $productsDetails;
     }
 
-    private function getAdditionalAttributes($product)
+    private function getProductAdditionalAttributes($product)
     {
         $response = [];
 
@@ -410,6 +410,11 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
         return $response;
     }
 
+    public function getAdditionalAttributes()
+    {
+        return $this->helper->getAdditionalAttributes();
+    }
+
     /**
      * @param $categoryId
      * @param $page
@@ -418,7 +423,7 @@ class Editea_Sorter_Model_Sorter extends Mage_Core_Model_Abstract
      * @return array
      * @throws Mage_Core_Exception
      */
-    private function getCategoryProductsCollection($categoryId, $page, $storeId, $brandId)
+    private function getCategoryProductCollection($categoryId, $page, $storeId, $brandId)
     {
         $category = Mage::getModel('catalog/category')
             ->setStoreId($storeId)

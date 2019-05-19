@@ -74,7 +74,17 @@ class Editea_Sorter_IndexController extends Mage_Core_Controller_Front_Action
     public function getProductDetailAction()
     {
         $this->handleRequest(
-            $this->sorterModel->getProductsDetails($this->jsonRequest)
+            $this->sorterModel->getProductDetail($this->jsonRequest)
+        );
+    }
+
+    /**
+     * Retrieve selected additional attributes
+     */
+    public function getAdditionalAttributesAction()
+    {
+        $this->handleRequest(
+            $this->sorterModel->getAdditionalAttributes()
         );
     }
 
