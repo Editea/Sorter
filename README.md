@@ -4,16 +4,16 @@ Editea Online Visual Merchandising - Magento 1 visual merchandiser
 Editea is the fastest and most relevant merchandising experience available for Magento. Editea is online visual merchandising interface that enables merchandisers and eCommerce professionals to dramatically reduce the time required to do online visual merchandising and update online storefronts.
 Editea extension allows you easily integrate your store catalog to Editea web application using the API, all you need is an Editea account to get your API credentials for connection.
 
-What is online visual merchandising?
+# What is online visual merchandising?
 Online visual merchandising is the process website manager use to determine how to best communicate their products to their customers based on website, customer and business data.
 Effective product  merchandising ensures that website products will be always relevant to consumers and drive them to act.
 Editea is a revolutionary SaaS interface solution for your all eCommerce Merchandising needs.
 Our Online Visual Merchandising interface will make your website products management much faster, accurate and easier to use
 
-Account & Pricing
+# Account & Pricing
 Editea sorter extension is free, but you do need an Editea account to use the extension. Editea plans for commercial use start at $99/month. Please see our pricing page for details.
 
-FEATURES
+# FEATURES
 Drag and Drop Catalog Management - Our revolutionary Drag and Drop online visual merchandising interface is so simple and intoative that it will save you up to 80% of your time dealing with your online visual merchandising needs.
 
 Drag and Drop Search System - Search engine fully integrated with our drag and drop system We are embarrassed when we look around us and see that there is no an easy way to manage products by search systems.
@@ -26,7 +26,7 @@ Arrange your screen look as you wish  - how your screen work will look is totall
 
 sorting by rules system - You can choose to merchandise your online store by stock or price with one click, choose the right option for you and see how all the products change their positions by your rule.
 
-ADDITIONAL RESOURCES
+# ADDITIONAL RESOURCES
 • Editea Sorter for Magento 1 documentation:  https://www.editea.com/magento-1-visual-merchandiser/
 
 • Github repository: https://github.com/Editea/Sorter
